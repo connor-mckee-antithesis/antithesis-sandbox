@@ -1,0 +1,14 @@
+version: '3.0'
+
+services:
+  application:
+    container_name: server
+    image: antithesis-sandbox
+    command: server
+    
+  workload:
+    container_name: workload
+    image: antithesis-sandbox
+    command: workload
+    depends_on:
+      - application
