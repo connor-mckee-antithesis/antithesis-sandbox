@@ -10,7 +10,8 @@ networks:
 services:
   application:
     container_name: server
-    image: antithesis-sandbox
+    hostname: server
+    image: antithesis-sandbox:antithesis-latest
     command: server
     ports:
       - "8080:8080"
@@ -20,7 +21,8 @@ services:
     
   workload:
     container_name: workload
-    image: antithesis-sandbox
+    hostname: workload
+    image: antithesis-sandbox:antithesis-latest
     command: workload
     depends_on:
       - application

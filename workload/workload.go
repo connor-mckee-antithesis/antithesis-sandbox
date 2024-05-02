@@ -3,12 +3,17 @@ package workload
 import (
 	"io"
 	"net/http"
+	"github.com/antithesishq/antithesis-sdk-go/lifecycle"
 )
 
 type Workload struct {
 }
 
+type Details map[string]any
+
 func (w *Workload) Execute() {
+	lifecycle.SetupComplete(Details{"Sandbox": "Available"})
+
 	client := http.Client{}
 
 	req, err := http.NewRequest("POST", "http://server:8080/tests/1", nil)
