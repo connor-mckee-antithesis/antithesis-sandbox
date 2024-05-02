@@ -1,10 +1,22 @@
 version: '3.0'
 
+networks:
+  formance:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+
 services:
   application:
     container_name: server
     image: antithesis-sandbox
     command: server
+    ports:
+      - "8080:8080"
+    networks:
+      formance:
+        ipv4_address: 10.0.0.16
     
   workload:
     container_name: workload
@@ -12,3 +24,6 @@ services:
     command: workload
     depends_on:
       - application
+    networks:
+      formance:
+        ipv4_address: 10.0.0.17

@@ -11,7 +11,7 @@ type Workload struct {
 func (w *Workload) Execute() {
 	client := http.Client{}
 
-	req, err := http.NewRequest("POST", "http://localhost:8080/tests/1", nil)
+	req, err := http.NewRequest("POST", "http://server:8080/tests/1", nil)
 
 	if err != nil {
 		panic(err)
