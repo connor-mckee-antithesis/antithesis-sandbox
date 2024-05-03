@@ -20,7 +20,7 @@ func (w *Workload) Execute() {
 
 	client := http.Client{}
 
-	for i := 0; i < 60; i++ {
+	for i := 0; i < 1e3; i++ {
 		log.Println(fmt.Sprintf("Executing workload request %d", i))
 		req, err := http.NewRequest("POST", "http://server:8080/tests/1", nil)
 
@@ -45,6 +45,6 @@ func (w *Workload) Execute() {
 
 		log.Println(fmt.Sprintf("Response: %s", string(b)))
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(1 * time.Millisecond)
 	}
 }

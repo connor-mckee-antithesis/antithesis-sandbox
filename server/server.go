@@ -3,7 +3,6 @@ package server
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 
 	"github.com/antithesishq/antithesis-sdk-go/assert"
@@ -11,11 +10,15 @@ import (
 )
 
 type Server struct {
+	state  map[string]int
+	count  int
 	router *chi.Mux
 }
 
 func NewServer() *Server {
-	s := &Server{}
+	s := &Server{
+		state: map[string]int{},
+	}
 
 	s.router = chi.NewRouter()
 
@@ -24,14 +27,14 @@ func NewServer() *Server {
 	})
 
 	s.router.Post("/tests/1", func(w http.ResponseWriter, r *http.Request) {
-		i := rand.Intn(1e6)
+		s.count++
 
-		assert.Sometimes(i < 1e5, "expected i to be less than 1e5", nil)
+		// implement a race-condition sensitive operation
+		s.state["steve"] += 100
 
-		// adding a hard to reach assertion to demonstrate the assertion failure
-		assert.Sometimes(i == 37, "expected i to be 37", nil)
+		assert.Always(s.state["steve"] == 100*s.count, "state[\"steve\"] == 100 * count", nil)
 
-		w.Write([]byte(fmt.Sprintf("%d", i)))
+		w.Write([]byte(fmt.Sprintf("state[\"steve\"] == %d", s.state["steve"])))
 	})
 
 	return s
