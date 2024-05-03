@@ -43,9 +43,7 @@ func (w *Workload) Execute() {
 			panic(err)
 		}
 
-		if string(b) != "1" {
-			panic("expected body to be 1")
-		}
+		log.Println(fmt.Sprintf("Response: %s", string(b)))
 
 		time.Sleep(1 * time.Second)
 	}

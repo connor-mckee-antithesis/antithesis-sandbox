@@ -1,9 +1,12 @@
 package server
 
 import (
+	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 
+	"github.com/antithesishq/antithesis-sdk-go/assert"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -21,7 +24,9 @@ func NewServer() *Server {
 	})
 
 	s.router.Post("/tests/1", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("1"))
+		i := rand.Intn(100)
+		assert.Sometimes(i < 50, "expected i to be less than 50", nil)
+		w.Write([]byte(fmt.Sprintf("%d", i)))
 	})
 
 	return s
