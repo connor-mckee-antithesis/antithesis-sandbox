@@ -26,16 +26,18 @@ func NewServer() *Server {
 		w.Write([]byte("Hello, world!"))
 	})
 
-	s.router.Post("/tests/1", func(w http.ResponseWriter, r *http.Request) {
+	f := func(w http.ResponseWriter, r *http.Request) {
 		s.count++
 
 		// implement a race-condition sensitive operation
 		s.state["steve"] += 100
 
-		assert.Always(s.state["steve"] == 100*s.count, "state[\"steve\"] == 100 * count", nil)
+		assert.Always(s.state["steve"] == 100*s.count, "state[steve] == 100 * count", nil)
 
 		w.Write([]byte(fmt.Sprintf("state[\"steve\"] == %d", s.state["steve"])))
-	})
+	}
+
+	s.router.Post("/tests/1", f)
 
 	return s
 }
