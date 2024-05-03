@@ -25,7 +25,12 @@ func NewServer() *Server {
 
 	s.router.Post("/tests/1", func(w http.ResponseWriter, r *http.Request) {
 		i := rand.Intn(100)
+
 		assert.Sometimes(i < 50, "expected i to be less than 50", nil)
+
+		// adding a non-sensical assertion to demonstrate the assertion failure
+		assert.Sometimes(i > 100, "expected i to be greater than 100", nil)
+
 		w.Write([]byte(fmt.Sprintf("%d", i)))
 	})
 
