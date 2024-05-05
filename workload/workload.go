@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"strconv"
 
 	"github.com/antithesishq/antithesis-sdk-go/lifecycle"
+	"github.com/antithesishq/antithesis-sdk-go/random"
 )
 
 type Workload struct {
@@ -16,11 +18,14 @@ type Workload struct {
 type Details map[string]any
 
 func (w *Workload) Execute() {
+
+	time.Sleep(time.Duration(5000) * time.Millisecond)
+
 	lifecycle.SetupComplete(Details{"Sandbox": "Available"})
 
 	client := http.Client{}
 
-	for i := 0; i < 1e3; i++ {
+	for i := 0; i < 1e7; i++ {
 		log.Println(fmt.Sprintf("Executing workload request %d", i))
 		req, err := http.NewRequest("POST", "http://server:8080/tests/1", nil)
 
@@ -45,6 +50,10 @@ func (w *Workload) Execute() {
 
 		log.Println(fmt.Sprintf("Response: %s", string(b)))
 
-		time.Sleep(1 * time.Millisecond)
+		sleep_millis := int(random.GetRandom() % 10)
+
+		log.Println(fmt.Sprintf("Sleeping for: %s", strconv.Itoa(sleep_millis)))
+
+		time.Sleep(time.Duration(sleep_millis) * time.Millisecond)
 	}
 }

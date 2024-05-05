@@ -15,6 +15,8 @@ services:
     command: server
     ports:
       - "8080:8080"
+    environment:
+      GOMAXPROCS: 2
     networks:
       formance:
         ipv4_address: 10.0.0.16
@@ -24,6 +26,8 @@ services:
     hostname: workload
     image: antithesis-sandbox:antithesis-latest
     command: workload
+    environment:
+      GOMAXPROCS: 2
     depends_on:
       - application
     networks:

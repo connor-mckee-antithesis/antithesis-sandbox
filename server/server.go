@@ -26,7 +26,7 @@ func NewServer() *Server {
 		w.Write([]byte("Hello, world!"))
 	})
 
-	f := func(w http.ResponseWriter, r *http.Request) {
+	s.router.Post("/tests/1", func(w http.ResponseWriter, r *http.Request) {
 		s.count++
 
 		// implement a race-condition sensitive operation
@@ -34,10 +34,10 @@ func NewServer() *Server {
 
 		assert.Always(s.state["steve"] == 100*s.count, "state[steve] == 100 * count", nil)
 
-		w.Write([]byte(fmt.Sprintf("state[\"steve\"] == %d", s.state["steve"])))
-	}
+		log.Printf("COMPARISON: result = %t, actual = %d, expected = %d\r\n", s.state["steve"] == 100*s.count, s.state["steve"], 100*s.count)
 
-	s.router.Post("/tests/1", f)
+		w.Write([]byte(fmt.Sprintf("state[\"steve\"] == %d", s.state["steve"])))
+	})
 
 	return s
 }
