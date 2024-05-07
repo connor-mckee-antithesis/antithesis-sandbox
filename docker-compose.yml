@@ -21,9 +21,9 @@ services:
       formance:
         ipv4_address: 10.0.0.16
     
-  workload:
-    container_name: workload
-    hostname: workload
+  workload-1:
+    container_name: workload-1
+    hostname: workload-1
     image: antithesis-sandbox:antithesis-latest
     command: workload
     environment:
@@ -33,3 +33,16 @@ services:
     networks:
       formance:
         ipv4_address: 10.0.0.17
+
+  workload-2:
+    container_name: workload-2
+    hostname: workload-2
+    image: antithesis-sandbox:antithesis-latest
+    command: workload
+    environment:
+      GOMAXPROCS: 2
+    depends_on:
+      - application
+    networks:
+      formance:
+        ipv4_address: 10.0.0.18

@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"strconv"
+	// "strconv"
 
 	"github.com/antithesishq/antithesis-sdk-go/lifecycle"
 	"github.com/antithesishq/antithesis-sdk-go/random"
@@ -19,6 +19,7 @@ type Details map[string]any
 
 func (w *Workload) Execute() {
 
+	// extra time to ensure ledger is up
 	time.Sleep(time.Duration(5000) * time.Millisecond)
 
 	lifecycle.SetupComplete(Details{"Sandbox": "Available"})
@@ -27,7 +28,8 @@ func (w *Workload) Execute() {
 
 	for i := 0; i < 1e7; i++ {
 		log.Println(fmt.Sprintf("Executing workload request %d", i))
-		req, err := http.NewRequest("POST", "http://server:8080/tests/1", nil)
+		// using IP instead of hostname
+		req, err := http.NewRequest("POST", "http://10.0.0.16:8080/tests/1", nil)
 
 		if err != nil {
 			panic(err)
@@ -52,7 +54,7 @@ func (w *Workload) Execute() {
 
 		sleep_millis := int(random.GetRandom() % 10)
 
-		log.Println(fmt.Sprintf("Sleeping for: %s", strconv.Itoa(sleep_millis)))
+		// log.Println(fmt.Sprintf("Sleeping for: %s", strconv.Itoa(sleep_millis)))
 
 		time.Sleep(time.Duration(sleep_millis) * time.Millisecond)
 	}
